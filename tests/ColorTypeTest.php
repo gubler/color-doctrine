@@ -1,4 +1,5 @@
 <?php
+
 namespace Gubler\Color\Doctrine;
 
 use Doctrine\DBAL\Types\Type;

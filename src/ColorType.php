@@ -1,20 +1,20 @@
 <?php
 /**
- * This file is part of the gubler/color-doctrine library
+ * This file is part of the gubler/color-doctrine library.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
  * @copyright Copyright (c) Daryl Gubler <http://dev88.co>
  * @license http://opensource.org/licenses/MIT MIT
- * @link https://packagist.org/packages/gubler/color-doctrine Packagist
- * @link https://github.com/gubler/color-doctrine GitHub
+ *
+ * @see https://packagist.org/packages/gubler/color-doctrine Packagist
+ * @see https://github.com/gubler/color-doctrine GitHub
  */
 
 namespace Gubler\Color\Doctrine;
 
 use Gubler\Color\Exception\InvalidColorException;
-use InvalidArgumentException;
 use Gubler\Color\Color;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
@@ -72,7 +72,7 @@ class ColorType extends Type
     /**
      * {@inheritdoc}
      *
-     * @param Color|null                                 $value
+     * @param Color|null                                $value
      * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
@@ -102,7 +102,8 @@ class ColorType extends Type
      * {@inheritdoc}
      *
      * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
-     * @return boolean
+     *
+     * @return bool
      */
     public function requiresSQLCommentHint(AbstractPlatform $platform)
     {
