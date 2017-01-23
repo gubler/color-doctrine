@@ -1,0 +1,33 @@
+{
+    "name": "gubler/color-doctrine",
+    "description": "Allow the use of a gubler/color Color as Doctrine field type.",
+    "type": "library",
+    "keywords": [
+        "color",
+        "doctrine"
+    ],
+    "homepage": "https://github.com/ramsey/uuid-doctrine",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Daryl Gubler",
+            "email": "daryl@dev88.co",
+            "homepage": "http://dev88.co"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/gubler/color-doctrine/issues",
+        "source": "https://github.com/gubler/color-doctrine"
+    },
+    "require": {
+        "php" : "^7.0",
+        "gubler/color": "^0.5",
+        "doctrine/orm": "^2.5"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "5.*"
+    },
+    "autoload": {
+        "psr-4": {"Gubler\\Color\\Doctrine\\": "src/"}
+    }
+}
