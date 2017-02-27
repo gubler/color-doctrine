@@ -28,7 +28,7 @@ In Symfony:
 doctrine:
     dbal:
         types:
-            color:  Guber\Color\Doctrine\ColorType
+            color: Gubler\Color\Doctrine\ColorType
 ```
 
 Then, in your models, you may annotate properties by setting the `@Column`
