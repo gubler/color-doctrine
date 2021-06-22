@@ -1,6 +1,6 @@
 <?php
 
-namespace Ramsey\Uuid\Doctrine;
+namespace Gubler\Color\Doctrine\Test;
 
 /**
  * The Doctrine ORM defines \Doctrine\ORM\EntityManager::__construct as a
@@ -11,5 +11,6 @@ class TestEntityManager extends \Doctrine\ORM\EntityManager
 {
     public function __construct()
     {
+        parent::__construct();
     }
 }

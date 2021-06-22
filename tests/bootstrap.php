@@ -10,7 +10,7 @@ if (!file_exists(dirname(__DIR__).'/vendor/autoload.php')) {
 }
 
 // Include the Composer autoloader
-$loader = include realpath(dirname(__FILE__).'/../vendor/autoload.php');
+$loader = include dirname(__FILE__, 2) . '/vendor/autoload.php';
 
 $loader->add('Doctrine\Tests\DBAL', __DIR__.'/../vendor/doctrine/dbal/tests');
 $loader->addPsr4('Gubler\\Color\\Doctrine\\', __DIR__);
