@@ -12,7 +12,7 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 
 class ColorTypeTest extends TestCase
 {
-    private MockObject $platform;
+    private AbstractPlatform&MockObject $platform;
     private ColorType|Type $type;
 
     public static function setUpBeforeClass(): void
@@ -112,7 +112,7 @@ class ColorTypeTest extends TestCase
      */
     public function testGetGuidTypeDeclarationSQL(): void
     {
-        $this->assertEquals('DUMMYVARCHAR()', $this->type->getSqlDeclaration(array('length' => 30), $this->platform));
+        $this->assertEquals('DUMMYVARCHAR()', $this->type->getSqlDeclaration(['length' => 30], $this->platform));
     }
 
     /**
@@ -123,10 +123,10 @@ class ColorTypeTest extends TestCase
         $this->assertTrue($this->type->requiresSQLCommentHint($this->platform));
     }
 
-    private function getPlatformMock(): MockObject
+    private function getPlatformMock(): AbstractPlatform&MockObject
     {
         return $this->getMockBuilder(AbstractPlatform::class)
-            ->setMethods(array('getGuidTypeDeclarationSQL'))
+            ->onlyMethods(['getGuidTypeDeclarationSQL'])
             ->getMockForAbstractClass();
     }
 }

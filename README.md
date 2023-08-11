@@ -31,34 +31,22 @@ doctrine:
             color: Gubler\Color\Doctrine\ColorType
 ```
 
-Then, in your models, you may annotate properties by setting the `@Column`
+Then, in your models, you may annotate properties by setting the `Column` attribute
 type to `color`. Doctrine will handle the rest.
 
 ``` php
-/**
- * @Entity
- * @Table(name="label")
- */
+ #[Entity]
+ #[Table(name="label")]
 class label
 {
-    /**
-     * @var \Gubler\Color\Color
-     *
-     * @Column(type="color")
-     */
-    protected $color;
+     #[Column(type="color")]
+    private Color $color;
 
     public function getColor(): \Gubler\Color\Color
     {
         return $this->color;
     }
 }
-```
-
-If you use the XML Mapping instead of PHP annotations.
-
-``` XML
-<color name="color" column="color" type="color"/>
 ```
 
 ### More Information

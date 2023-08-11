@@ -14,7 +14,6 @@
 
 namespace Gubler\Color\Doctrine;
 
-use Gubler\Color\Exception\InvalidColorException;
 use Gubler\Color\Color;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
@@ -31,26 +30,22 @@ class ColorType extends Type
     /**
      * @var string
      */
-    const NAME = 'color';
+    public const NAME = 'color';
 
     /**
      * {@inheritdoc}
-     *
-     * @param array                                     $fieldDeclaration
-     * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
      */
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
-        return $platform->getGuidTypeDeclarationSQL($fieldDeclaration);
+        return $platform->getGuidTypeDeclarationSQL($column);
     }
 
     /**
      * {@inheritdoc}
      *
-     * @param string|null                               $value
-     * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
+     * @throws ConversionException
      */
-    public function convertToPHPValue($value, AbstractPlatform $platform)
+    public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?Color
     {
         if (empty($value)) {
             return null;
@@ -62,7 +57,7 @@ class ColorType extends Type
 
         try {
             $color = new Color($value);
-        } catch (InvalidColorException $e) {
+        } catch (\Exception) {
             throw ConversionException::conversionFailed($value, self::NAME);
         }
 
@@ -72,10 +67,9 @@ class ColorType extends Type
     /**
      * {@inheritdoc}
      *
-     * @param Color|null                                $value
-     * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
+     * @throws ConversionException
      */
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
+    public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?string
     {
         if (empty($value)) {
             return null;
@@ -90,22 +84,16 @@ class ColorType extends Type
 
     /**
      * {@inheritdoc}
-     *
-     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return self::NAME;
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
-     *
-     * @return bool
      */
-    public function requiresSQLCommentHint(AbstractPlatform $platform)
+    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
     {
         return true;
     }
