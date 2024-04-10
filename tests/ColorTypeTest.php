@@ -2,18 +2,20 @@
 
 namespace Gubler\Color\Doctrine\Test;
 
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use Gubler\Color\Color;
 use Gubler\Color\Doctrine\ColorType;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
 
+#[CoversClass(ColorType::class)]
 class ColorTypeTest extends TestCase
 {
     private AbstractPlatform&MockObject $platform;
-    private ColorType|Type $type;
+    private ColorType $type;
 
     public static function setUpBeforeClass(): void
     {
@@ -25,16 +27,15 @@ class ColorTypeTest extends TestCase
     protected function setUp(): void
     {
         $this->platform = $this->getPlatformMock();
-        $this->platform->expects($this->any())
+        $this->platform
             ->method('getGuidTypeDeclarationSQL')
             ->willReturn('DUMMYVARCHAR()');
 
-        $this->type = Type::getType('color');
+        /** @var ColorType $type */
+        $type = Type::getType('color');
+        $this->type = $type;
     }
 
-    /**
-     * @covers \Gubler\Color\Doctrine\ColorType::convertToDatabaseValue
-     */
     public function testColorConvertsToDatabaseValue(): void
     {
         $color = new Color('#ffffff');
@@ -45,26 +46,17 @@ class ColorTypeTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    /**
-     * @covers \Gubler\Color\Doctrine\ColorType::convertToDatabaseValue
-     */
     public function testInvalidColorConversionForDatabaseValue(): void
     {
         $this->expectException(ConversionException::class);
         $this->type->convertToDatabaseValue('abcdefg', $this->platform);
     }
 
-    /**
-     * @covers \Gubler\Color\Doctrine\ColorType::convertToDatabaseValue
-     */
     public function testNullConversionForDatabaseValue(): void
     {
         $this->assertNull($this->type->convertToDatabaseValue(null, $this->platform));
     }
 
-    /**
-     * @covers \Gubler\Color\Doctrine\ColorType::convertToPHPValue
-     */
     public function testColorConvertsToPHPValue(): void
     {
         $color = $this->type->convertToPHPValue('rgba(255, 255, 255, 1.0)', $this->platform);
@@ -73,51 +65,33 @@ class ColorTypeTest extends TestCase
         $this->assertEquals('rgba(255, 255, 255, 1)', (string) $color);
     }
 
-    /**
-     * @covers \Gubler\Color\Doctrine\ColorType::convertToPHPValue
-     */
     public function testInvalidColorConversionForPHPValue(): void
     {
         $this->expectException(ConversionException::class);
         $this->type->convertToPHPValue('abcdefg', $this->platform);
     }
 
-    /**
-     * @covers \Gubler\Color\Doctrine\ColorType::convertToPHPValue
-     */
     public function testNullConversionForPHPValue(): void
     {
         $this->assertNull($this->type->convertToPHPValue(null, $this->platform));
     }
 
-    /**
-     * @covers \Gubler\Color\Doctrine\ColorType::convertToPHPValue
-     */
     public function testReturnValueIfColorForPHPValue(): void
     {
         $color = new Color('#ffffff');
         $this->assertSame($color, $this->type->convertToPHPValue($color, $this->platform));
     }
 
-    /**
-     * @covers \Gubler\Color\Doctrine\ColorType::getName
-     */
     public function testGetName(): void
     {
         $this->assertEquals('color', $this->type->getName());
     }
 
-    /**
-     * @covers \Gubler\Color\Doctrine\ColorType::getSqlDeclaration
-     */
     public function testGetGuidTypeDeclarationSQL(): void
     {
         $this->assertEquals('DUMMYVARCHAR()', $this->type->getSqlDeclaration(['length' => 30], $this->platform));
     }
 
-    /**
-     * @covers \Gubler\Color\Doctrine\ColorType::requiresSQLCommentHint
-     */
     public function testRequiresSQLCommentHint(): void
     {
         $this->assertTrue($this->type->requiresSQLCommentHint($this->platform));
@@ -126,7 +100,6 @@ class ColorTypeTest extends TestCase
     private function getPlatformMock(): AbstractPlatform&MockObject
     {
         return $this->getMockBuilder(AbstractPlatform::class)
-            ->onlyMethods(['getGuidTypeDeclarationSQL'])
-            ->getMockForAbstractClass();
+            ->getMock();
     }
 }

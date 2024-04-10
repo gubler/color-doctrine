@@ -14,10 +14,10 @@
 
 namespace Gubler\Color\Doctrine;
 
-use Gubler\Color\Color;
-use Doctrine\DBAL\Types\ConversionException;
-use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Types\Exception\InvalidFormat;
+use Doctrine\DBAL\Types\Type;
+use Gubler\Color\Color;
 
 /**
  * Field type mapping for the Doctrine Database Abstraction Layer (DBAL).
@@ -32,19 +32,11 @@ class ColorType extends Type
      */
     public const NAME = 'color';
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         return $platform->getGuidTypeDeclarationSQL($column);
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @throws ConversionException
-     */
     public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?Color
     {
         if (empty($value)) {
@@ -57,18 +49,13 @@ class ColorType extends Type
 
         try {
             $color = new Color($value);
-        } catch (\Exception) {
-            throw ConversionException::conversionFailed($value, self::NAME);
+        } catch (\Exception $e) {
+            throw InvalidFormat::new(value: $value, toType: self::class, expectedFormat: null, previous: $e);
         }
 
         return $color;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @throws ConversionException
-     */
     public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?string
     {
         if (empty($value)) {
@@ -79,20 +66,14 @@ class ColorType extends Type
             return (string) $value;
         }
 
-        throw ConversionException::conversionFailed($value, self::NAME);
+        throw InvalidFormat::new(value: $value, toType: Color::class, expectedFormat: null);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return self::NAME;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function requiresSQLCommentHint(AbstractPlatform $platform): bool
     {
         return true;

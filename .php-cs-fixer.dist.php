@@ -8,14 +8,16 @@ $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__ . '/src')
     ->in(__DIR__ . '/tests')
     ->append([__FILE__])
+    ->exclude(__DIR__ . '/src/bin/phpunit')
 ;
 
 $config = new PhpCsFixer\Config();
 
 return $config->setRules([
-    '@PHP81Migration' => true,
-    '@PHP82Migration' => true,
-    '@PHPUnit100Migration:risky' => true,
+    '@PHP71Migration' => true,
+    '@PHPUnit75Migration:risky' => true,
+    '@Symfony' => true,
+    '@Symfony:risky' => true,
     'protected_to_private' => false,
     'no_unused_imports' => true,
     'strict_param' => true,
@@ -23,6 +25,6 @@ return $config->setRules([
     'concat_space' => ['spacing' => 'one'],
 ])
     ->setRiskyAllowed(true)
-    ->setCacheFile(__DIR__ . '/var/.php-cs-fixer.cache')
+    ->setCacheFile(__DIR__ . '/var/cache/.php-cs-fixer.cache')
     ->setFinder($finder)
 ;
